@@ -1,0 +1,40 @@
+server:
+  port: 8081
+  address: 127.0.0.1
+  sessionTimeout: 30
+  contextPath: /
+  compressionEnabled: true
+  display-name: partner platform 
+
+logging:
+  file: info.log
+  level.*: INFO
+  path: logs
+  register-shutdown-hook: true 
+  
+  # Tomcat specifics
+  tomcat:
+    accessLogEnabled: true
+    protocolHeader: x-forwarded-proto
+    remoteIpHeader: x-forwarded-for
+    basedir:
+    backgroundProcessorDelay: 20 # secs
+    max-threads: 100
+    
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  groovy:
+    template:
+      configuration:
+        auto-escape: false
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/planta?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    max-active: 10
+    max-idle: 5
+    min-idle: 2
+    username: root
+    password: 
