@@ -86,15 +86,15 @@ public class SubVideoTaskBean {
 
 	public String getPlatformStr() {
 		switch (this.platform) {
-		case Constants.PLATFORM_TENGXUN:
+		case Constants.VIDEO_PLATFORM_TENGXUN:
 			return "腾讯";
-		case Constants.PLATFORM_YOUTU:
+		case Constants.VIDEO_PLATFORM_YOUTU:
 			return "优土";
-		case Constants.PLATFORM_AQIYI:
+		case Constants.VIDEO_PLATFORM_AQIYI:
 			return "爱奇艺";
-		case Constants.PLATFORM_LETV:
+		case Constants.VIDEO_PLATFORM_LETV:
 			return "乐视";
-		case Constants.PLATFORM_SOHU:
+		case Constants.VIDEO_PLATFORM_SOHU:
 			return "搜狐";
 		default:
 			return "未知";

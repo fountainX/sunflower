@@ -8,11 +8,15 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div>
-		<a href="/console/videotasks">视屏任务列表</a>
-	</div>
-	<div>
-		<a href="/console/tasks">搜索任务列表</a>
-	</div>
+	<a href="/console/index">首页</a> >> <a href="/console/tasks">搜索任务列表</a>
+	<form action="/console/insert_task_post" method="post">
+		<div>
+			<label for="keyword">关键字: </label>
+			<input type="text" name="keyword" style="width:300px" />
+		</div>
+		<div>
+			<input type="submit" value="添加" />
+		</div>
+	</form>
 </body>
 </html>

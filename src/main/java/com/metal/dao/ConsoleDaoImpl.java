@@ -16,7 +16,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import com.metal.common.Constants;
+import com.metal.model.SubTask;
 import com.metal.model.SubVideoTaskBean;
+import com.metal.model.Task;
 import com.metal.model.VideoTaskBean;
 import com.mysql.jdbc.Statement;
 
@@ -29,7 +31,7 @@ public class ConsoleDaoImpl implements ConsoleDao {
 	
 	private static final String VIDEO_TASK_INSERT_SQL = "insert into video_task (url,platform,title,status,tv_id) values (?,?,?,?,?)";
 	
-	private static final String QUERY_VIDEO_TASK = "select vid,url,platform,title,status,start_time,end_time from video_task order by start_time limit 100";
+	private static final String QUERY_VIDEO_TASK = "select vid,url,platform,title,status,start_time,end_time from video_task order by start_time order by vid desc limit 100";
 	
 	private static final String QUERY_VIDEO_TASK_BY_ID = "select vid,url,platform,title,status,start_time,end_time from video_task where vid=?";
 	
@@ -44,6 +46,22 @@ public class ConsoleDaoImpl implements ConsoleDao {
 	private static final String QUERY_SUB_VIDEO_TASK_BY_VID = "select sub_vid,vid,page_url,platform,title,status,add_time,last_update_time from sub_video_task where vid=? order by sub_vid asc";
 
 	private static final String STOP_SUB_VIDEO_TASK = "update sub_video_task set status=" + Constants.TASK_STATUS_STOP + " where vid=? and status=" + Constants.TASK_STATUS_INIT;
+	
+	private static final String QUERY_TASK_SQL = "select task_id,key_word,status,start_time,end_time from task order by task_id desc limit 100";
+	
+	private static final String QUERY_SUB_TASK_SQL = "select sub_task_id,task_id,platform,url,status,start_time,end_time from sub_task where task_id=? order by sub_task_id desc limit 100";
+	
+	private static final String QUERY_TASK_BY_ID = "select task_id,key_word,status,start_time,end_time from task where task_id=?";
+	
+	private static final String QUERY_SUB_TASK_BY_ID = "select sub_task_id,task_id,platform,url,status,start_time,end_time from sub_task where sub_task_id=?";
+	
+	private static final String TASK_INSERT_SQL = "insert into task(key_word) values(?)";
+	
+	private static final String UPDATE_TASK_STATUS = "update task set status=? where task_id=?";
+	
+	private static final String UPDATE_SUB_TASK_STATUS = "update sub_task set status=? where sub_task_id=?";
+	
+	private static final String STOP_SUB_TASK = "update sub_task set status=" + Constants.TASK_STATUS_STOP + " where task_id=? and status=" + Constants.TASK_STATUS_INIT;
 	
 	@Autowired
 	public ConsoleDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -145,7 +163,7 @@ public class ConsoleDaoImpl implements ConsoleDao {
 			
 		});
 		jdbcTemplate.update(UPDATE_SUB_VIDEO_TASK_STATUS, Constants.TASK_STATUS_INIT, subVid);
-		jdbcTemplate.update(UPDATE_VIDEO_TASK_STATUS, Constants.TASK_STATUS_INIT, subVideoTask.getVid());
+		jdbcTemplate.update(UPDATE_VIDEO_TASK_STATUS, Constants.TASK_STATUS_RUNNING, subVideoTask.getVid());
 	}
 	
 	@Override
@@ -164,6 +182,96 @@ public class ConsoleDaoImpl implements ConsoleDao {
 	public int getSubVideoCommentCount(long subVid) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+
+	@Override
+	public List<Task> getTasks() {
+		List<Task> tasks = jdbcTemplate.query(QUERY_TASK_SQL, new RowMapper<Task>() {
+			@Override
+			public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return taskPackage(rs);
+			}
+		});
+		return tasks;
+	}
+
+	@Override
+	public List<SubTask> getSubTasks(long taskId) {
+		List<SubTask> subTasks = jdbcTemplate.query(QUERY_SUB_TASK_SQL, new Object[] { taskId }, new RowMapper<SubTask>() {
+			@Override
+			public SubTask mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return subTaskPackage(rs);
+			}
+		});
+		return subTasks;
+	}
+
+	@Override
+	public Task getTaskById(long task_id) {
+		Task task = jdbcTemplate.query(QUERY_TASK_BY_ID, new Object[] { task_id }, new ResultSetExtractor<Task>() {
+			@Override
+			public Task extractData(ResultSet rs) throws SQLException,
+					DataAccessException {
+				if(rs.next()) {
+					return taskPackage(rs);
+				} else {
+					return null;
+				}
+			}
+		});
+		return task;
+	}
+
+	@Override
+	public SubTask getSubTaskById(long sub_task_id) {
+		SubTask subTask = jdbcTemplate.query(QUERY_SUB_VIDEO_TASK_BY_ID, new Object[] { sub_task_id }, new ResultSetExtractor<SubTask>() {
+			@Override
+			public SubTask extractData(ResultSet rs) throws SQLException,
+					DataAccessException {
+				if(rs.next()) {
+					return subTaskPackage(rs);
+				} else {
+					return null;
+				}
+			}
+			
+		});
+		return subTask;
+	}
+	
+	@Override
+	public void createTask(Task task) {
+		jdbcTemplate.update(TASK_INSERT_SQL, task.getKey_word());		
+	}
+	
+	@Override
+	public void revertTask(long task_id) {
+		jdbcTemplate.update(UPDATE_TASK_STATUS, Constants.TASK_STATUS_INIT, task_id);
+	}
+	
+	@Override
+	public void revertSubTask(long subTaskId) {
+		SubTask subTask = jdbcTemplate.query(QUERY_SUB_TASK_SQL, new Object[] { subTaskId }, new ResultSetExtractor<SubTask>() {
+			@Override
+			public SubTask extractData(ResultSet rs) throws SQLException,
+					DataAccessException {
+				if(rs.next()) {
+					return subTaskPackage(rs);
+				} else {
+					return null;
+				}
+			}
+			
+		});
+		jdbcTemplate.update(UPDATE_SUB_TASK_STATUS, Constants.TASK_STATUS_INIT, subTaskId);
+		jdbcTemplate.update(UPDATE_TASK_STATUS, Constants.TASK_STATUS_INIT, subTask.getTask_id());
+	}
+	
+	@Override
+	public void stopTask(long task_id) {
+		jdbcTemplate.update(UPDATE_TASK_STATUS, Constants.TASK_STATUS_STOP, task_id);
+		jdbcTemplate.update(STOP_SUB_TASK, task_id);
 	}
 	
 	private VideoTaskBean videoTaskPackage(ResultSet rs) {
@@ -202,4 +310,35 @@ public class ConsoleDaoImpl implements ConsoleDao {
 		return subVideoTaskBean;
 	}
 
+	private Task taskPackage(ResultSet rs) {
+		Task task = new Task();
+		try {
+			task.setTask_id(rs.getLong("task_id"));
+			task.setKey_word(rs.getString("key_word"));
+			task.setStatus(rs.getInt("status"));
+			task.setStart_time(rs.getDate("start_time"));
+			task.setEnd_time(rs.getDate("end_time"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return task;
+	}
+	
+	private SubTask subTaskPackage(ResultSet rs) {
+		SubTask subTask = new SubTask();
+		try {
+			subTask.setSub_task_id(rs.getLong("sub_task_id"));
+			subTask.setTask_id(rs.getLong("task_id"));
+			subTask.setUrl(rs.getString("url"));
+			subTask.setPlatform(rs.getInt("platform"));
+			subTask.setStatus(rs.getInt("status"));
+			subTask.setStart_time(rs.getDate("start_time"));
+			subTask.setEnd_time(rs.getDate("end_time"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return subTask;
+	}
 }
