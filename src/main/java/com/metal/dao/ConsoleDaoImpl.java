@@ -1,27 +1,33 @@
 package com.metal.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import com.metal.common.Constants;
 import com.metal.model.SubVideoTaskBean;
 import com.metal.model.VideoTaskBean;
+import com.mysql.jdbc.Statement;
 
 @Component
 public class ConsoleDaoImpl implements ConsoleDao {
 
 	private final JdbcTemplate jdbcTemplate;
 
-	private static final String VIDEO_TASK_INSERT_SQL = "insert into video_task (url,platform,title,status) values (?,?,?,?)";
+	private static final String TV_SHOW_INSERT_SQL = "insert into tv_show (tv_show_name) values (?)";
+	
+	private static final String VIDEO_TASK_INSERT_SQL = "insert into video_task (url,platform,title,status,tv_id) values (?,?,?,?,?)";
 	
 	private static final String QUERY_VIDEO_TASK = "select vid,url,platform,title,status,start_time,end_time from video_task order by start_time limit 100";
 	
@@ -67,8 +73,23 @@ public class ConsoleDaoImpl implements ConsoleDao {
 	}
 
 	@Override
+	public long createTVShow(String title) {
+		KeyHolder keyHolder = new GeneratedKeyHolder(); 
+		jdbcTemplate.update(new PreparedStatementCreator() {  
+			@Override
+			public PreparedStatement createPreparedStatement(
+					java.sql.Connection con) throws SQLException {
+				   PreparedStatement ps = con.prepareStatement(TV_SHOW_INSERT_SQL, Statement.RETURN_GENERATED_KEYS); 
+	               ps.setString(1, title);  
+	               return ps;  
+			}  
+	    }, keyHolder);
+		return keyHolder.getKey().longValue();
+	}
+
+	@Override
 	public void createVideoTasks(VideoTaskBean videoTaskBean) {
-		jdbcTemplate.update(VIDEO_TASK_INSERT_SQL, videoTaskBean.getUrl(), videoTaskBean.getPlatform(), videoTaskBean.getTitle(), Constants.TASK_STATUS_INIT);
+		jdbcTemplate.update(VIDEO_TASK_INSERT_SQL, videoTaskBean.getUrl(), videoTaskBean.getPlatform(), videoTaskBean.getTitle(), Constants.TASK_STATUS_INIT, videoTaskBean.getTv_id());
 	}
 	
 	@Override

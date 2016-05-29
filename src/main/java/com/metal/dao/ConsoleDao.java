@@ -11,6 +11,8 @@ public interface ConsoleDao {
 
 	public List<SubVideoTaskBean> getSubVideoTasks(long vid);
 
+	public long createTVShow(String title);
+	
 	public void createVideoTasks(VideoTaskBean videoTaskBean);
 	
 	public VideoTaskBean getVideoTaskById(long vid);

@@ -12,6 +12,7 @@ public class VideoTaskBean {
 	private int status;
 	private Date start_time;
 	private Date end_time;
+	private long tv_id;
 
 	public long getVid() {
 		return vid;
@@ -67,6 +68,14 @@ public class VideoTaskBean {
 
 	public void setEnd_time(Date end_time) {
 		this.end_time = end_time;
+	}
+
+	public long getTv_id() {
+		return tv_id;
+	}
+
+	public void setTv_id(long tv_id) {
+		this.tv_id = tv_id;
 	}
 
 	public String getPlatformStr() {

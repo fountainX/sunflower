@@ -29,6 +29,8 @@ public class ConsoleServiceImpl implements ConsoleService {
 
 	@Override
 	public void createVideoTasks(VideoTaskBean videoTaskBean) {
+		long tv_id = consoleDao.createTVShow(videoTaskBean.getTitle());
+		videoTaskBean.setTv_id(tv_id);
 		consoleDao.createVideoTasks(videoTaskBean);
 	}
 
