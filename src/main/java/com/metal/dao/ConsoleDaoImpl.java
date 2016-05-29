@@ -31,7 +31,7 @@ public class ConsoleDaoImpl implements ConsoleDao {
 	
 	private static final String VIDEO_TASK_INSERT_SQL = "insert into video_task (url,platform,title,status,tv_id) values (?,?,?,?,?)";
 	
-	private static final String QUERY_VIDEO_TASK = "select vid,url,platform,title,status,start_time,end_time from video_task order by start_time order by vid desc limit 100";
+	private static final String QUERY_VIDEO_TASK = "select vid,url,platform,title,status,start_time,end_time from video_task order by start_time desc limit 100";
 	
 	private static final String QUERY_VIDEO_TASK_BY_ID = "select vid,url,platform,title,status,start_time,end_time from video_task where vid=?";
 	
@@ -47,7 +47,7 @@ public class ConsoleDaoImpl implements ConsoleDao {
 
 	private static final String STOP_SUB_VIDEO_TASK = "update sub_video_task set status=" + Constants.TASK_STATUS_STOP + " where vid=? and status=" + Constants.TASK_STATUS_INIT;
 	
-	private static final String QUERY_TASK_SQL = "select task_id,key_word,status,start_time,end_time from task order by task_id desc limit 100";
+	private static final String QUERY_TASK_SQL = "select task_id,key_word,status,start_time,end_time from task order by start_time desc limit 100";
 	
 	private static final String QUERY_SUB_TASK_SQL = "select sub_task_id,task_id,platform,url,status,start_time,end_time from sub_task where task_id=? order by sub_task_id desc limit 100";
 	
@@ -225,7 +225,7 @@ public class ConsoleDaoImpl implements ConsoleDao {
 
 	@Override
 	public SubTask getSubTaskById(long sub_task_id) {
-		SubTask subTask = jdbcTemplate.query(QUERY_SUB_VIDEO_TASK_BY_ID, new Object[] { sub_task_id }, new ResultSetExtractor<SubTask>() {
+		SubTask subTask = jdbcTemplate.query(QUERY_SUB_TASK_BY_ID, new Object[] { sub_task_id }, new ResultSetExtractor<SubTask>() {
 			@Override
 			public SubTask extractData(ResultSet rs) throws SQLException,
 					DataAccessException {

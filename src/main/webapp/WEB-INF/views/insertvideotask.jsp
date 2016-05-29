@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<a href="/console/index">首页</a> >> <a href="/console/videotasks">视屏任务列表</a>
+	<a href="/console/index">首页</a> >> <a href="/console/videotasks">视频任务列表</a>
 	
 	<form action="/console/insert_video_task_post" method="post">
 		<div>

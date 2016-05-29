@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div>
-		<a href="/console/videotasks">视屏任务列表</a>
+		<a href="/console/videotasks">视频任务列表</a>
 	</div>
 	<div>
 		<a href="/console/tasks">搜索任务列表</a>
