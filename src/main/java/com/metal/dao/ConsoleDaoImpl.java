@@ -29,13 +29,15 @@ public class ConsoleDaoImpl implements ConsoleDao {
 
 	private static final String TV_SHOW_INSERT_SQL = "insert into tv_show (tv_show_name) values (?)";
 	
-	private static final String VIDEO_TASK_INSERT_SQL = "insert into video_task (url,platform,title,status,tv_id) values (?,?,?,?,?)";
+	private static final String VIDEO_TASK_INSERT_SQL = "insert into video_task (url,platform,title,status,reset_time,tv_id) values (?,?,?,?,?,?)";
 	
-	private static final String QUERY_VIDEO_TASK = "select vid,url,platform,title,status,start_time,end_time from video_task order by start_time desc limit 100";
+	private static final String QUERY_VIDEO_TASK = "select vid,url,platform,title,status,start_time,end_time,reset_time from video_task order by start_time desc limit 100";
 	
-	private static final String QUERY_VIDEO_TASK_BY_ID = "select vid,url,platform,title,status,start_time,end_time from video_task where vid=?";
+	private static final String QUERY_VIDEO_TASK_BY_ID = "select vid,url,platform,title,status,start_time,end_time,reset_time from video_task where vid=?";
 	
 	private static final String QUERY_SUB_VIDEO_TASK_BY_ID = "select sub_vid,vid,page_url,platform,title,status,add_time,last_update_time from sub_video_task where sub_vid=?";
+	
+	private static final String UPDATE_VIDEO_TASK = "update video_task set title=?,reset_time=? where vid=?";
 	
 	private static final String UPDATE_VIDEO_TASK_STATUS = "update video_task set status=? where vid=?";
 	
@@ -107,7 +109,7 @@ public class ConsoleDaoImpl implements ConsoleDao {
 
 	@Override
 	public void createVideoTasks(VideoTaskBean videoTaskBean) {
-		jdbcTemplate.update(VIDEO_TASK_INSERT_SQL, videoTaskBean.getUrl(), videoTaskBean.getPlatform(), videoTaskBean.getTitle(), Constants.TASK_STATUS_INIT, videoTaskBean.getTv_id());
+		jdbcTemplate.update(VIDEO_TASK_INSERT_SQL, videoTaskBean.getUrl(), videoTaskBean.getPlatform(), videoTaskBean.getTitle(), Constants.TASK_STATUS_INIT, videoTaskBean.getReset_time(), videoTaskBean.getTv_id());
 	}
 	
 	@Override
@@ -184,6 +186,10 @@ public class ConsoleDaoImpl implements ConsoleDao {
 		return 0;
 	}
 	
+	@Override
+	public void updateVideoTask(VideoTaskBean video) {
+		jdbcTemplate.update(UPDATE_VIDEO_TASK, video.getTitle(), video.getReset_time(), video.getVid());
+	}
 
 	@Override
 	public List<Task> getTasks() {
@@ -285,6 +291,7 @@ public class ConsoleDaoImpl implements ConsoleDao {
 //			videoTaskBean.setStart_time(rs.getTime("start_time"));
 			videoTaskBean.setStart_time(rs.getTimestamp("start_time"));
 			videoTaskBean.setEnd_time(rs.getTimestamp("end_time"));
+			videoTaskBean.setReset_time(rs.getTime("reset_time"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

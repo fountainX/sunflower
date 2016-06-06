@@ -15,6 +15,14 @@
 		<a href="/console/inserttask">>>添加新的搜索任务</a>
 	</div>
 	<table border=1>
+		<colgroup>
+			<col width="50">
+			<col width="100">
+			<col width="100">
+			<col width="100">
+			<col width="50">
+			<col width="50">
+		</colgroup>
 		<tr>
 		    <th>ID</th>
 			<th>关键字</th>

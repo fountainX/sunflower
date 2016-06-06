@@ -78,6 +78,12 @@ public class ConsoleServiceImpl implements ConsoleService {
 	}
 
 	@Override
+	public void updateVideoTask(VideoTaskBean video) {
+		consoleDao.updateVideoTask(video);
+	}
+	
+	
+	@Override
 	public List<Task> getTasks() {
 		return consoleDao.getTasks();
 	}

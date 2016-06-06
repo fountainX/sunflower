@@ -29,6 +29,8 @@ public interface ConsoleService {
 	
 	public int getSubVideoCommentCount(long subVid);
 
+	public void updateVideoTask(VideoTaskBean video);
+	
 	
 	public List<Task> getTasks();
 	

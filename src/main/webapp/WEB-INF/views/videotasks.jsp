@@ -15,6 +15,17 @@
 		<a href="/console/insertvideotask">>>添加新的视频任务</a>
 	</div>
 	<table border=1>
+		<colgroup>
+			<col width="50">
+			<col width="80">
+			<col width="200">
+			<col>
+			<col width="100">
+			<col width="100">
+			<col width="50">
+			<col width="50">
+			<col width="50">
+		</colgroup>
 		<tr>
 		    <th>ID</th>
 			<th>平台</th>
@@ -23,6 +34,7 @@
 			<th>状态</th>
 			<th>开始时间</th>
 			<!-- <th>结束时间</th> -->
+			<th>定时重抓时间</th>
 			<th>详细</th>
 			<th>操作</th>
 		</tr>
@@ -35,7 +47,11 @@
 				<td><c:out value="${videotask.statusStr }"/></td>
 				<td><c:out value="${videotask.start_time }"/></td>
 				<%-- <td><c:out value="${videotask.end_time }"/></td> --%>
-				<td><a href="/console/subvideotasks/${videotask.vid }">详细</a></td>
+				<td><c:out value="${videotask.reset_time }"/></td>
+				<td>
+					<a href="/console/subvideotasks/${videotask.vid }">详细</a>
+					<a href="/console/updatevideotask?vid=${videotask.vid }">更新</a>
+				</td>
 				<c:choose>
 					<c:when test="${videotask.status == 0 || videotask.status == 1 }">
 						<td><a href="javascript:stop_confirm(${videotask.vid })">停止</a></td>

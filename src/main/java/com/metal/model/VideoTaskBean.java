@@ -1,5 +1,6 @@
 package com.metal.model;
 
+import java.sql.Time;
 import java.util.Date;
 
 import com.metal.common.Constants;
@@ -13,6 +14,7 @@ public class VideoTaskBean {
 	private Date start_time;
 	private Date end_time;
 	private long tv_id;
+	private Time reset_time;
 
 	public long getVid() {
 		return vid;
@@ -76,6 +78,14 @@ public class VideoTaskBean {
 
 	public void setTv_id(long tv_id) {
 		this.tv_id = tv_id;
+	}
+	
+	public Time getReset_time() {
+		return reset_time;
+	}
+
+	public void setReset_time(Time reset_time) {
+		this.reset_time = reset_time;
 	}
 
 	public String getPlatformStr() {

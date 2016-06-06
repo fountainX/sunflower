@@ -10,35 +10,30 @@
 <body>
 	<a href="/console/index">首页</a> >> <a href="/console/videotasks">视频任务列表</a>
 	
-	<form action="/console/insert_video_task_post" method="post">
+	<form action="/console/update_video_task_post" method="post">
 		<div>
 			<label for="url">URL: </label>
-			<input type="text" name="url" style="width:300px" />
+			<input type="text" name="url" style="width:300px" value="${videotask.url }" disabled/>
 		</div>
 		<div>
 			<label for="platform">平台: </label>
-			<select name="platform">
-				<option value="0">腾讯</option>
-				<option value="1">优土</option>
-				<option value="2" selected>爱奇艺</option>
-				<option value="3">乐视</option>
-				<option value="4">搜狐</option>
-			</select>
+			<c:out value="${videotask.platformStr }"/>
 		</div>
 		<div>
 			<label for="title">标题: </label>
-			<input type="text" name="title" style="width:300px" />
+			<input type="text" name="title" style="width:300px" value="${videotask.title }" />
 		</div>
 		<div>
 			<label for="reset-time">定时重抓: </label>
-			<input type="text" name="reset-hour" style="width:50px" />
+			<input type="text" name="reset-hour" style="width:50px" value="${videotask.reset_time.toString().split(':')[0] }" />
 			:
-			<input type="text" name="reset-min" style="width:50px" />
+			<input type="text" name="reset-min" style="width:50px" value="${videotask.reset_time.toString().split(':')[1] }" />
 			: 
-			<input type="text" name="reset-sec" style="width:50px" value="00" disabled/>
+			<input type="text" name="reset-min" style="width:50px" value="00" disabled/>
 		</div>
+		<input type="hidden" name="vid" value="${videotask.vid }" />
 		<div>
-			<input type="submit" value="添加" />
+			<input type="submit" value="更新" />
 		</div>
 	</form>
 </body>

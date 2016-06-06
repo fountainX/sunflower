@@ -1,6 +1,7 @@
 package com.metal.controller;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +69,9 @@ public class ConsoleController {
 	@ResponseBody
 	void postInsertVideoTask(@RequestParam("url") String url,
 			@RequestParam("platform") int platform,
-			@RequestParam("title") String title, HttpServletResponse response) throws IOException {
+			@RequestParam("title") String title, 
+			@RequestParam("reset-hour") String resetHour, 
+			@RequestParam("reset-min") String resetMin, HttpServletResponse response) throws IOException {
 		if(StringUtils.isEmpty(url) || StringUtils.isEmpty(title)) {
 			response.sendRedirect("/console/videotasks");
 		} else {
@@ -76,6 +79,17 @@ public class ConsoleController {
 			videoTask.setUrl(url);
 			videoTask.setPlatform(platform);
 			videoTask.setTitle(title);
+			try {
+				int hour = Integer.parseInt(resetHour);
+				int min = Integer.parseInt(resetMin);
+				if(hour < 0 || hour > 23 || min < 0 || min > 59) {
+					videoTask.setReset_time(null);
+				} else {
+					videoTask.setReset_time(Time.valueOf(resetHour + ":" + resetMin + ":00"));
+				}
+			} catch (NumberFormatException e) {
+				videoTask.setReset_time(null);
+			}
 			consoleService.createVideoTasks(videoTask);
 			response.sendRedirect("/console/videotasks");
 		}
@@ -100,6 +114,37 @@ public class ConsoleController {
 	@ResponseBody
 	void stopVideoTask(@PathVariable("vid") long vid, HttpServletResponse response) throws IOException {
 		consoleService.stopVideoTask(vid);
+		response.sendRedirect("/console/videotasks");
+	}
+	
+	@RequestMapping("/updatevideotask")
+	String updateVideoTask(@RequestParam("vid") long vid, Map<String, Object> model) {
+		VideoTaskBean bean = consoleService.getVideoTaskById(vid);
+		model.put("videotask", bean);
+		return "updatevideotask";
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/update_video_task_post")
+	@ResponseBody
+	void postUpdateVideoTask(@RequestParam("vid") long vid,
+			@RequestParam("title") String title, 
+			@RequestParam("reset-hour") String resetHour, 
+			@RequestParam("reset-min") String resetMin, HttpServletResponse response) throws IOException {
+		VideoTaskBean video = new VideoTaskBean();
+		video.setVid(vid);
+		video.setTitle(title);
+		try {
+			int hour = Integer.parseInt(resetHour);
+			int min = Integer.parseInt(resetMin);
+			if(hour < 0 || hour > 23 || min < 0 || min > 59) {
+				video.setReset_time(null);
+			} else {
+				video.setReset_time(Time.valueOf(resetHour + ":" + resetMin + ":00"));
+			}
+		} catch (NumberFormatException e) {
+			video.setReset_time(null);
+		}
+		consoleService.updateVideoTask(video);
 		response.sendRedirect("/console/videotasks");
 	}
 	
@@ -158,4 +203,5 @@ public class ConsoleController {
 		consoleService.stopTask(task_id);
 		response.sendRedirect("/console/tasks");
 	}	
+	
 }
