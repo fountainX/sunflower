@@ -25,6 +25,7 @@
 			<col width="50">
 			<col width="50">
 			<col width="50">
+			<col width="50">
 		</colgroup>
 		<tr>
 		    <th>ID</th>
@@ -35,6 +36,7 @@
 			<th>开始时间</th>
 			<!-- <th>结束时间</th> -->
 			<th>定时重抓时间</th>
+			<th>评论数</th>
 			<th>详细</th>
 			<th>操作</th>
 		</tr>
@@ -48,18 +50,22 @@
 				<td><c:out value="${videotask.start_time }"/></td>
 				<%-- <td><c:out value="${videotask.end_time }"/></td> --%>
 				<td><c:out value="${videotask.reset_time }"/></td>
+				<td><c:out value="${videotask.count }"/></td>
 				<td>
 					<a href="/console/subvideotasks/${videotask.vid }">详细</a>
 					<a href="/console/updatevideotask?vid=${videotask.vid }">更新</a>
 				</td>
-				<c:choose>
-					<c:when test="${videotask.status == 0 || videotask.status == 1 }">
-						<td><a href="javascript:stop_confirm(${videotask.vid })">停止</a></td>
-					</c:when>
-					<c:otherwise>
-						<td><a href="javascript:revert_confirm(${videotask.vid });">重置</a></td>
-					</c:otherwise>
-				</c:choose>
+				<td>
+					<c:choose>
+						<c:when test="${videotask.status == 0 || videotask.status == 1 }">
+							<a href="javascript:stop_confirm(${videotask.vid })">停止</a>
+						</c:when>
+						<c:otherwise>
+							<a href="javascript:revert_confirm(${videotask.vid });">重置</a>
+						</c:otherwise>
+					</c:choose>
+					<a href="javascript:remove_confirm(${videotask.vid })">删除</a>
+				</td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -76,6 +82,14 @@
 		  	var r=confirm("确定停止吗？")
 		  	if (r==true) {
 		    	window.location.href = "/console/stopvideotask/" + vid;
+		  	} else {
+		    	// nothing
+			}
+		}
+		function remove_confirm(vid) {
+		  	var r=confirm("确定删除任务吗？将彻底删除！")
+		  	if (r==true) {
+		    	window.location.href = "/console/removevideotask/" + vid;
 		  	} else {
 		    	// nothing
 			}

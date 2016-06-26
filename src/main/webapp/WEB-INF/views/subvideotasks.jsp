@@ -18,6 +18,7 @@
 			<th>URL</th>
 			<th>状态</th>
 			<th>添加时间</th>
+			<th>评论数</th>
 			<!-- <th>结束时间</th> -->
 		</tr>
 		<c:forEach var="subvideotask" items="${subvideotasks }">
@@ -29,6 +30,7 @@
 				<td><c:out value="${subvideotask.page_url }"/></td>
 				<td><c:out value="${subvideotask.statusStr }"/></td>
 				<td><c:out value="${subvideotask.add_time }"/></td>
+				<td><c:out value="${subvideotask.count }"/></td>
 				<%-- <td><c:out value="${subvideotask.last_update_time }"/></td> --%>
 			</tr>
 		</c:forEach>

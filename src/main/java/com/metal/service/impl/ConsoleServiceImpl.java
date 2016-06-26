@@ -82,6 +82,10 @@ public class ConsoleServiceImpl implements ConsoleService {
 		consoleDao.updateVideoTask(video);
 	}
 	
+	@Override
+	public void removeVideoTask(long vid) {
+		consoleDao.removeVideoTask(vid);
+	}
 	
 	@Override
 	public List<Task> getTasks() {
@@ -127,6 +131,16 @@ public class ConsoleServiceImpl implements ConsoleService {
 	@Override
 	public void stopTask(long taskId) {
 		consoleDao.stopTask(taskId);
+	}
+
+	@Override
+	public void resetHour(long subTaskId, int hour) {
+		consoleDao.resetHour(subTaskId, hour);
+	}
+
+	@Override
+	public void removeTask(long task_id) {
+		consoleDao.removeTask(task_id);
 	}
 
 }

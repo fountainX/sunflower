@@ -10,6 +10,8 @@ public class Task {
 	private int status;
 	private Date start_time;
 	private Date end_time;
+	private int count;
+	
 	public long getTask_id() {
 		return task_id;
 	}
@@ -40,7 +42,13 @@ public class Task {
 	public void setEnd_time(Date end_time) {
 		this.end_time = end_time;
 	}
-	
+
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	public String getStatusStr() {
 		switch(this.status) {
 		case Constants.TASK_STATUS_INIT:

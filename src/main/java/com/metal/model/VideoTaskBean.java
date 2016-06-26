@@ -15,6 +15,7 @@ public class VideoTaskBean {
 	private Date end_time;
 	private long tv_id;
 	private Time reset_time;
+	private int count;
 
 	public long getVid() {
 		return vid;
@@ -86,6 +87,14 @@ public class VideoTaskBean {
 
 	public void setReset_time(Time reset_time) {
 		this.reset_time = reset_time;
+	}
+	
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
 	}
 
 	public String getPlatformStr() {

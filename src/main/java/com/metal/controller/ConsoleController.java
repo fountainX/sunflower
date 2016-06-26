@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -30,6 +32,8 @@ import com.metal.service.ConsoleService;
 @RequestMapping("/console")
 public class ConsoleController {
 
+	private static Logger log = LoggerFactory.getLogger(ConsoleController.class);
+	
 	@Autowired
 	private ConsoleService consoleService;
 
@@ -114,6 +118,13 @@ public class ConsoleController {
 	@ResponseBody
 	void stopVideoTask(@PathVariable("vid") long vid, HttpServletResponse response) throws IOException {
 		consoleService.stopVideoTask(vid);
+		response.sendRedirect("/console/videotasks");
+	}
+	
+	@RequestMapping("/removevideotask/{vid}")
+	@ResponseBody
+	void removeVideoTask(@PathVariable("vid") long vid, HttpServletResponse response) throws IOException {
+		consoleService.removeVideoTask(vid);
 		response.sendRedirect("/console/videotasks");
 	}
 	
@@ -204,4 +215,19 @@ public class ConsoleController {
 		response.sendRedirect("/console/tasks");
 	}	
 	
+	@RequestMapping("/reset_hour")
+	@ResponseBody
+	void modifyResetHour(@RequestParam("sid") long subId, @RequestParam("hour") int hour, 
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.info("sub task id: " + subId);
+		log.info("hour: " + hour);
+		consoleService.resetHour(subId, hour);
+	}
+	
+	@RequestMapping("/removetask/{task_id}")
+	@ResponseBody
+	void removeTask(@PathVariable("task_id") long task_id, HttpServletResponse response) throws IOException {
+		consoleService.removeTask(task_id);
+		response.sendRedirect("/console/tasks");
+	}
 }

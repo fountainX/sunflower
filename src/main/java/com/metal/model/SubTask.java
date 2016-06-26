@@ -13,6 +13,9 @@ public class SubTask {
 	private int status;
 	private Date start_time;
 	private Date end_time;
+	private int reset_hour;
+	private int count;
+	
 	public long getSub_task_id() {
 		return sub_task_id;
 	}
@@ -54,6 +57,20 @@ public class SubTask {
 	}
 	public void setEnd_time(Date end_time) {
 		this.end_time = end_time;
+	}
+	
+	public int getReset_hour() {
+		return reset_hour;
+	}
+	public void setReset_hour(int reset_hour) {
+		this.reset_hour = reset_hour;
+	}
+
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
 	}
 	
 	public String getPlatformStr() {

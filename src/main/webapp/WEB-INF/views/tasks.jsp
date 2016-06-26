@@ -22,6 +22,7 @@
 			<col width="100">
 			<col width="50">
 			<col width="50">
+			<col width="50">
 		</colgroup>
 		<tr>
 		    <th>ID</th>
@@ -29,6 +30,7 @@
 			<th>状态</th>
 			<th>开始时间</th>
 			<!-- <th>结束时间</th> -->
+			<th>抓取量</th>
 			<th>详细</th>
 			<th>操作</th>
 		</tr>
@@ -39,15 +41,19 @@
 				<td><c:out value="${task.statusStr }"/></td>
 				<td><c:out value="${task.start_time }"/></td>
 				<%-- <td><c:out value="${task.end_time }"/></td> --%>
+				<td><c:out value="${task.count }"/></td>
 				<td><a href="/console/subtasks/${task.task_id }">详细</a></td>
-				<c:choose>
-					<c:when test="${task.status == 0 || task.status == 1 }">
-						<td><a href="javascript:stop_confirm(${task.task_id })">停止</a></td>
-					</c:when>
-					<c:otherwise>
-						<td><a href="javascript:revert_confirm(${task.task_id });">重置</a></td>
-					</c:otherwise>
-				</c:choose>
+				<td>
+					<c:choose>
+						<c:when test="${task.status == 0 || task.status == 1 }">
+							<a href="javascript:stop_confirm(${task.task_id })">停止</a>
+						</c:when>
+						<c:otherwise>
+							<a href="javascript:revert_confirm(${task.task_id });">重置</a>
+						</c:otherwise>
+					</c:choose>
+					<a href="javascript:remove_confirm(${task.task_id });">删除</a>
+				</td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -64,6 +70,14 @@
 		  	var r=confirm("确定停止吗？")
 		  	if (r==true) {
 		    	window.location.href = "/console/stoptask/" + task_id;
+		  	} else {
+		    	// nothing
+			}
+		}
+		function remove_confirm(task_id) {
+		  	var r=confirm("确定删除任务吗？将彻底删除！")
+		  	if (r==true) {
+		    	window.location.href = "/console/removetask/" + task_id;
 		  	} else {
 		    	// nothing
 			}

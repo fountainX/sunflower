@@ -33,6 +33,7 @@ public interface ConsoleDao {
 	
 	public void updateVideoTask(VideoTaskBean video);
 	
+	public void removeVideoTask(long vid);
 	
 	public List<Task> getTasks();
 	
@@ -49,4 +50,8 @@ public interface ConsoleDao {
 	public void revertSubTask(long subTaskId);
 	
 	public void stopTask(long task_id);
+	
+	public void resetHour(long subTaskId, int hour);
+	
+	public void removeTask(long taskId);
 }

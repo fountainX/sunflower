@@ -19,6 +19,7 @@ public class SubVideoTaskBean {
 	private int status;
 	private Date add_time;
 	private Date last_update_time;
+	private int count;
 
 	public long getSub_vid() {
 		return sub_vid;
@@ -82,6 +83,14 @@ public class SubVideoTaskBean {
 
 	public void setLast_update_time(Date last_update_time) {
 		this.last_update_time = last_update_time;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
 	}
 
 	public String getPlatformStr() {

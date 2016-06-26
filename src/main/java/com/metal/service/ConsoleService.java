@@ -47,4 +47,10 @@ public interface ConsoleService {
 	public void revertSubTask(long subTaskId);
 	
 	public void stopTask(long taskId);
+	
+	public void resetHour(long subTaskId, int hour);
+
+	public void removeVideoTask(long vid);
+
+	public void removeTask(long task_id);
 }
