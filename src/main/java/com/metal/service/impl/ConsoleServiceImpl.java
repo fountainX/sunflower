@@ -1,5 +1,6 @@
 package com.metal.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,4 +144,27 @@ public class ConsoleServiceImpl implements ConsoleService {
 		consoleDao.removeTask(task_id);
 	}
 
+	@Override
+	public void startQQDanmuTask(long vid) {
+		List<VideoTaskBean> videoTasks = consoleDao.getVideoTasks(Constants.VIDEO_PLATFORM_TENGXUN);
+		int runCount = 0;
+		for(VideoTaskBean bean : videoTasks) {
+			if(bean.getBarrage_status() == Constants.TASK_STATUS_RUNNING) {
+				runCount++;
+			}
+		}
+		if(runCount > 0) {
+			// TODO
+			return;
+		} else {
+//			Process process =null;
+		    String command = "nohup /Users/wxp/Documents/tmp/test.sh " + vid + " 30";
+		    try {
+				Runtime.getRuntime().exec(command);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }

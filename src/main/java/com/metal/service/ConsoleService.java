@@ -53,4 +53,6 @@ public interface ConsoleService {
 	public void removeVideoTask(long vid);
 
 	public void removeTask(long task_id);
+
+	public void startQQDanmuTask(long vid);
 }

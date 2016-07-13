@@ -11,6 +11,8 @@ public interface ConsoleDao {
 	
 	public List<VideoTaskBean> getVideoTasks();
 
+	public List<VideoTaskBean> getVideoTasks(int platform);
+	
 	public List<SubVideoTaskBean> getSubVideoTasks(long vid);
 
 	public long createTVShow(String title);
@@ -54,4 +56,5 @@ public interface ConsoleDao {
 	public void resetHour(long subTaskId, int hour);
 	
 	public void removeTask(long taskId);
+
 }

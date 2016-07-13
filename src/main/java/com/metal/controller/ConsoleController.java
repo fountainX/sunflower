@@ -159,6 +159,14 @@ public class ConsoleController {
 		response.sendRedirect("/console/videotasks");
 	}
 	
+	@RequestMapping("/qqdanmu")
+	@ResponseBody
+	void qqdanmu(@RequestParam("vid") long vid, HttpServletResponse response) throws IOException {
+		// TODO
+		consoleService.startQQDanmuTask(vid);
+		response.sendRedirect("/console/videotasks");
+	}
+	
 	//===========
 	@RequestMapping("/tasks")
 	String getTasks(Map<String, Object> model) {
@@ -230,4 +238,5 @@ public class ConsoleController {
 		consoleService.removeTask(task_id);
 		response.sendRedirect("/console/tasks");
 	}
+	
 }

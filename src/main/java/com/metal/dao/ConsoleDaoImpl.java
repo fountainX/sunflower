@@ -27,7 +27,7 @@ import com.mysql.jdbc.Statement;
 @Component
 public class ConsoleDaoImpl implements ConsoleDao {
 
-	private static final String WEIBO_SEARCH_FORMAT = "http://s.weibo.com/weibo/%s";
+	private static final String WEIBO_SEARCH_FORMAT = "http://s.weibo.com/weibo/%s?nodup=1";
 	private static final String WEIXIN_SEARCH_FORMAT = "http://weixin.sogou.com/weixin?type=2&query=%s&ie=utf8";
 	
 	private final JdbcTemplate jdbcTemplate;
@@ -36,7 +36,9 @@ public class ConsoleDaoImpl implements ConsoleDao {
 	
 	private static final String VIDEO_TASK_INSERT_SQL = "insert into video_task (url,platform,title,status,reset_time,tv_id) values (?,?,?,?,?,?)";
 	
-	private static final String QUERY_VIDEO_TASK = "select v.vid,v.url,v.platform,v.title,v.status,v.start_time,v.end_time,v.reset_time,count(c.comment_id) count from video_task v left join video_comments c on v.vid=c.vid group by v.vid order by v.start_time desc limit 100";
+	private static final String QUERY_VIDEO_TASK = "select v.vid,v.url,v.platform,v.title,v.status,v.barrage_status,v.start_time,v.end_time,v.reset_time,count(c.comment_id) count from video_task v left join video_comments c on v.vid=c.vid group by v.vid order by v.start_time desc limit 100";
+	
+	private static final String QUERY_VIDEO_TASK_BY_PLATFORM = "select v.vid,v.url,v.platform,v.title,v.status,v.barrage_status,v.start_time,v.end_time,v.reset_time,count(c.comment_id) count from video_task v left join video_comments c on v.vid=c.vid where v.platform=? group by v.vid order by v.start_time desc limit 100";
 	
 	private static final String QUERY_VIDEO_TASK_BY_ID = "select vid,url,platform,title,status,start_time,end_time,reset_time from video_task where vid=?";
 	
@@ -86,6 +88,17 @@ public class ConsoleDaoImpl implements ConsoleDao {
 	@Override
 	public List<VideoTaskBean> getVideoTasks() {
 		List<VideoTaskBean> videoTasks = jdbcTemplate.query(QUERY_VIDEO_TASK, new RowMapper<VideoTaskBean>() {
+			@Override
+			public VideoTaskBean mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return videoTaskPackage(rs);
+			}
+		});
+		return videoTasks;
+	}
+	
+	@Override
+	public List<VideoTaskBean> getVideoTasks(int platform) {
+		List<VideoTaskBean> videoTasks = jdbcTemplate.query(QUERY_VIDEO_TASK_BY_PLATFORM, new Object[] {platform}, new RowMapper<VideoTaskBean>() {
 			@Override
 			public VideoTaskBean mapRow(ResultSet rs, int rowNum) throws SQLException {
 				return videoTaskPackage(rs);
@@ -349,6 +362,7 @@ public class ConsoleDaoImpl implements ConsoleDao {
 			videoTaskBean.setTitle(rs.getString("title"));
 			videoTaskBean.setPlatform(rs.getInt("platform"));
 			videoTaskBean.setStatus(rs.getInt("status"));
+			videoTaskBean.setBarrage_status(rs.getInt("barrage_status"));
 //			videoTaskBean.setStart_time(rs.getTime("start_time"));
 			videoTaskBean.setStart_time(rs.getTimestamp("start_time"));
 			videoTaskBean.setEnd_time(rs.getTimestamp("end_time"));

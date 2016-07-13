@@ -13,6 +13,16 @@
 
 	<a href="/console/index">首页</a> >> <a href="/console/tasks">搜索任务列表</a>
 	<table border=1>
+		<colgroup>
+			<col width="50">
+			<col width="50">
+			<col width="50">
+			<col>
+			<col width="100">
+			<col width="100">
+			<col width="50">
+			<col width="50">
+		</colgroup>
 		<tr>
 		    <th>ID</th>
 		    <th>任务ID</th>

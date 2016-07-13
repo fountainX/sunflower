@@ -11,6 +11,7 @@ public class VideoTaskBean {
 	private int platform;
 	private String title;
 	private int status;
+	private int barrage_status;
 	private Date start_time;
 	private Date end_time;
 	private long tv_id;
@@ -55,6 +56,14 @@ public class VideoTaskBean {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	
+	public int getBarrage_status() {
+		return barrage_status;
+	}
+
+	public void setBarrage_status(int barrage_status) {
+		this.barrage_status = barrage_status;
 	}
 
 	public Date getStart_time() {
